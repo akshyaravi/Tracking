@@ -19,7 +19,7 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'development'
+  origin: process.env.NODE_ENV === 'production'
     ? ['http://localhost:3000']
     : ['https://tracking-mu-six.vercel.app'],
   credentials: true
