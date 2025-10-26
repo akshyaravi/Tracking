@@ -21,7 +21,7 @@ connectDB();
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
     ? ['https://tracking-mu-six.vercel.app', 'https://tracking-ew8ubd9rs-akshyas-projects-8e9b72a3.vercel.app', 'https://tracking-i144nspbq-akshyas-projects-8e9b72a3.vercel.app']
-    : ['http://localhost:3000'],
+    : ['http://localhost:3000', 'http://localhost:5173'],
   credentials: true
 }));
 app.use(express.json());
