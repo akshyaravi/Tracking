@@ -19,11 +19,38 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? ['https://tracking-mu-six.vercel.app', 'https://tracking-ew8ubd9rs-akshyas-projects-8e9b72a3.vercel.app', 'https://tracking-i144nspbq-akshyas-projects-8e9b72a3.vercel.app']
-    : ['http://localhost:3000', 'http://localhost:5173'],
-  credentials: true
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = process.env.NODE_ENV === 'production'
+      ? [
+          'https://tracking-mu-six.vercel.app',
+          'https://tracking-ew8ubd9rs-akshyas-projects-8e9b72a3.vercel.app',
+          'https://tracking-i144nspbq-akshyas-projects-8e9b72a3.vercel.app',
+          'https://tracking-yr4b.vercel.app/api/auth/login',
+          'https://tracking-mu-six.vercel.app'
+        ]
+      : ['http://localhost:3000', 'http://localhost:5173'];
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('Blocked by CORS:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
+
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.status(200).send();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
