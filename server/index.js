@@ -17,35 +17,18 @@ const app = express();
 connectDB();
 
 const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        
-        // In production, allow all vercel.app subdomains
-        if (process.env.NODE_ENV === 'production') {
-            if (
-                origin.endsWith('.vercel.app') ||
-                origin.endsWith('.vercel.app') ||
-                origin === 'https://tracking-mu-six.vercel.app' ||
-                origin === 'https://tracking-yr4b.vercel.app'
-            ) {
-                return callback(null, true);
-            }
-        }
-        
-        // Development origins
-        const devOrigins = ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8080'];
-        if (devOrigins.includes(origin)) {
-            return callback(null, true);
-        }
-        
-        console.log('Blocked by CORS:', origin);
-        callback(new Error('Not allowed by CORS'));
-    },
+    origin: [
+        'https://tracking-frontend-ashen.vercel.app',
+        'https://tracking-mu-six.vercel.app', 
+        'https://tracking-yr4b.vercel.app',
+        'http://localhost:3000',
+        'http://localhost:5173',
+        'http://localhost:8080'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-    optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+    optionsSuccessStatus: 200
 };
 
 
