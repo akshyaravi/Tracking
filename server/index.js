@@ -18,38 +18,34 @@ connectDB();
 
 const corsOptions = {
     origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
-
-        const allowedOrigins = process.env.NODE_ENV === 'production'
-            ? [
-                'https://tracking-mu-six.vercel.app',
-                'https://tracking-ew8ubd9rs-akshyas-projects-8e9b72a3.vercel.app',
-                'https://tracking-i144nspbq-akshyas-projects-8e9b72a3.vercel.app',
-                /\.vercel\.app$/,
-                /\.vercel-app\.com$/
-            ]
-            : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8080'];
-
-        // Check if origin matches any allowed origin or pattern
-        const isAllowed = allowedOrigins.some(allowed => {
-            if (typeof allowed === 'string') {
-                return allowed === origin;
-            } else if (allowed instanceof RegExp) {
-                return allowed.test(origin);
+        
+        // In production, allow all vercel.app subdomains
+        if (process.env.NODE_ENV === 'production') {
+            if (
+                origin.endsWith('.vercel.app') ||
+                origin.endsWith('.vercel.app') ||
+                origin === 'https://tracking-mu-six.vercel.app' ||
+                origin === 'https://tracking-yr4b.vercel.app'
+            ) {
+                return callback(null, true);
             }
-            return false;
-        });
-
-        if (isAllowed) {
-            callback(null, true);
-        } else {
-            console.log('Blocked by CORS:', origin);
-            callback(new Error('Not allowed by CORS'));
         }
+        
+        // Development origins
+        const devOrigins = ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8080'];
+        if (devOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        
+        console.log('Blocked by CORS:', origin);
+        callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    optionsSuccessStatus: 200 // Some legacy browsers choke on 204
 };
 
 
