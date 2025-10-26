@@ -36,7 +36,7 @@ const seedDatabase = async () => {
       {
         username: 'admin',
         email: 'admin@demo.com',
-        password: await bcrypt.hash('admin123', 12),
+        password: 'admin123',
         role: 'admin',
         profile: {
           firstName: 'Admin',
@@ -47,7 +47,7 @@ const seedDatabase = async () => {
       {
         username: 'bot',
         email: 'bot@demo.com',
-        password: await bcrypt.hash('bot123', 12),
+        password: 'bot123',
         role: 'bot',
         profile: {
           firstName: 'Bot',
@@ -58,7 +58,7 @@ const seedDatabase = async () => {
       {
         username: 'applicant1',
         email: 'user@demo.com',
-        password: await bcrypt.hash('user123', 12),
+        password: 'user123',
         role: 'applicant',
         profile: {
           firstName: 'John',
